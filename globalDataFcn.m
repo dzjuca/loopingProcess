@@ -3,33 +3,32 @@ function Global = globalDataFcn()
       % globalData-function return a structure 'Global' with data constants
 % -------------------------------------------------------------------------
 % -------------------- | General Data |------------------------------------
-      Global.R = 8.314472e-3;         % Universal Gas Constant    [kJ/molK]    
-      Global.P = 1.01325;             % Pressure                      [bar]  
-      Global.P_atm = 1;               % Pressure                      [atm]  
-      Global.R_atm = 0.08206;         % Universal Gas Constant [atm L/molK]
-      Global.Tbed    = (623 + 273.15);% Temperature                     [K]
-      Global.g       = 981.0;         % Gravity                     [cm/s2]
-      Global.Num_esp_1 = 18;          % number of species               [#]
-      
-      Global.Num_esp_2 = 9;           % number of species               [#]
-      Global.gen     = 6;             % gas species number              [#]
-      Global.sen     = 3;             % solid species number            [#]
+      Global.R          = 8.314472e-3;   % Universal Gas Constant [kJ/molK]    
+      Global.P          = 1.01325;       % Pressure                   [bar]  
+      Global.P_atm      = 1;             % Pressure                   [atm]  
+      Global.R_atm      = 0.08206;       % Universal Constant  [atm L/molK]
+      Global.Tbed       = (623 + 273.15);% Temperature                  [K]
+      Global.g          = 981.0;         % Gravity                  [cm/s2]
+      Global.Num_esp_1  = 10;          % number of species              [#] 
+      Global.Num_esp_2  = 0;           % number of species              [#]
+      Global.gen        = 2;             % gas species number           [#]
+      Global.sen        = 3;             % solid species number         [#]
       Global.iterations = Iterations.getInstance();% number of iterations
-      Global.n1      = 40;            % mesh points number              [#] 
-      Global.n2      = 60;            % mesh points number              [#]
-      Global.nt      = Global.n1 + Global.n2; % total mesh points number[#]
-% ---------- thermal conductivity - constant E ---------------------------- 
-      Global.E = 1;                  %   E - numeral constant near to 1  []
-      Global.k_factor = 0;           %   k - factor correction           [] 
+      Global.n1         = 40;            % mesh points number           [#] 
+      Global.n2         = 60;            % mesh points number           [#]
+      Global.nt         = Global.n1 + Global.n2; % total mesh points n  [#]
 % ----------| Flow rate and concentration of species |---------------------
 % ----- total feed flow in the reactor's bottom ---------------------------
-      Global.QT_in = 1200*2.2;            %  condicion_1           [STP ml/min] ======> modificado para no tener problemas con u_t
+      Global.streamGas.massFlow   = 1200; % [g/s]
+      Global.streamGas.molarFlow  = ; % [mol/s]
+      Global.streamGas.volumeFlow = ; % [cm3/s]
 % ----- flow feed ratio for each specie -----------------------------------
       CH4in_rat = 50.0;               % CH4                             [%]
       N2in_rat  = 50.0;               % N2                              [%]
 % ----- flow feed for each specie -----------------------------------------
       FCH4in = (CH4in_rat/100)*Global.QT_in/(22.4*1000*60); %       [mol/s]
       FN2in  = ( N2in_rat/100)*Global.QT_in/(22.4*1000*60); %       [mol/s]
+      
 % ----- feed concentration for each specie --------------------------------
       Global.CH4in = (FCH4in*60/Global.QT_in); %                  [mol/cm3]
       Global.N2in  = ( FN2in*60/Global.QT_in); %                  [mol/cm3]
@@ -63,6 +62,7 @@ function Global = globalDataFcn()
       Global.fDynamics.a_u0 = 7;   %                                  [s-1]
       Global.fDynamics.f_d  = 0.3; %                                     []
       Global.fDynamics.Pe_ax = 6;  % Axial Peclet Number                 []
+
 % ---------- Carrier Data -------------------------------------------------
       Global.carrier.R       = 8.314472;  % Universal Gas Constant [J/molK] 
       Global.carrier.a0      = 1020000;   % specific surface area   [cm2/g]
@@ -94,6 +94,9 @@ function Global = globalDataFcn()
       Global.EK(5)    = 809.1;        % - H2O                           [K]
       Global.EK(6)    = 71.40;        % - N2                            [K]
 % -------------------------------------------------------------------------
+% ---------- thermal conductivity - constant E ---------------------------- 
+      Global.E = 1;                  %   E - numeral constant near to 1  []
+      Global.k_factor = 0;           %   k - factor correction           [] 
 % ---------| viscosity constants data |------------------------------------
 % ---------- experimental temperature was used to determine Tc and Pc -----
       Global.Tb.CH4 = 111.66;        % - CH4                            [K] 
