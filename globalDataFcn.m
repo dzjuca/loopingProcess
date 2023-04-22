@@ -18,28 +18,39 @@ function Global = globalDataFcn()
       Global.n2         = 60;            % mesh points number           [#]
       Global.nt         = Global.n1 + Global.n2; % total mesh points n  [#]
 % ----------| Flow rate and concentration of species |---------------------
+      Global.streamGas.mmass.O2      = 31.9990;  % - O2             [g/mol]
+      Global.streamGas.mmass.N2      = 28.0140;  % - N2             [g/mol]
+      Global.streamSolid.mmass.Ni    = 58.6934;  % - Ni             [g/mol]
+      Global.streamSolid.mmass.NiO   = 74.6920;  % - NiO            [g/mol]
+      Global.streamSolid.mmass.Al2O3 = 101.9610; % - Al2O3          [g/mol]
 % ----- total feed flow in the reactor's bottom ---------------------------
-      Global.streamGas.massFlow   = 1200; % [g/s]
-      Global.streamGas.molarFlow  = ; % [mol/s]
-      Global.streamGas.volumeFlow = ; % [cm3/s]
-% ----- flow feed ratio for each specie -----------------------------------
-      CH4in_rat = 50.0;               % CH4                             [%]
-      N2in_rat  = 50.0;               % N2                              [%]
-% ----- flow feed for each specie -----------------------------------------
-      FCH4in = (CH4in_rat/100)*Global.QT_in/(22.4*1000*60); %       [mol/s]
-      FN2in  = ( N2in_rat/100)*Global.QT_in/(22.4*1000*60); %       [mol/s]
-      
-% ----- feed concentration for each specie --------------------------------
-      Global.CH4in = (FCH4in*60/Global.QT_in); %                  [mol/cm3]
-      Global.N2in  = ( FN2in*60/Global.QT_in); %                  [mol/cm3]
-
-      if (Global.QT_in == 0) 
-          Global.CH4in =  0;  
-          Global.N2in  =  0;  
-      end
+            g_molFlow   = 0.010782;            %                    [mol/s]
+            g_volFlow   = g_molFlow*22.4*1000; %                    [cm3/s]
+            g_O2_r      = 0.21;                % ratio                  [%]
+            g_N2_r      = 0.79;                % ratio                  [%]
+            g_O2_c      = g_O2_r*g_molFlow/g_volFlow;%         [mol O2/cm3]   
+            g_N2_c      = g_N2_r*g_molFlow/g_volFlow;%         [mol N2/cm3]         
+      % -------------------------------------------------------------------
+      Global.streamGas.composition.O2  = g_O2_c; % composition    [mol/cm3]
+      Global.streamGas.composition.N2  = g_N2_c; % composition    [mol/cm3]
+      Global.streamGas.molarFlow  = g_molFlow; %                    [mol/s]
+      Global.streamGas.volumeFlow = g_volFlow; %                    [cm3/s]
+      % -------------------------------------------------------------------
+            s_mFlow   = 0.8333; %                                     [g/s]
+            s_Ni_c    = 0.18;   %                                 [gNi/g-c]
+            s_NiO_c   = 0.00;   %                                [gNiO/g-c]
+            s_Al2O3_c = 0.82;   %                              [gAl2O3/g-c]
+            s_molFlow = s_mFlow*s_Ni_c/Global.streamSolid.mmass.Ni   + ...
+                        s_mFlow*s_NiO_c/Global.streamSolid.mmass.NiO + ...
+                        s_mFlow*s_Al2O3_c/Global.streamSolid.mmass.Al2O3;                                  
+      Global.streamSolid.composition.Ni    = s_Ni_c;    %        [gNi/g-c]
+      Global.streamSolid.composition.NiO   = s_NiO_c;   %        [gNiO/g-c]
+      Global.streamSolid.composition.Al2O3 = s_Al2O3_c; %      [gAl2O3/g-c]
+      Global.streamSolid.massFlow   = s_mFlow;          %             [g/s]
+      Global.streamSolid.molarFlow  = s_molFlow;        %           [mol/s]
 % ---------- reactor constant data  ---------------------------------------
-      Global.reactor.rID     = 4.6;% internal diameter of the reactor  [cm]
-      Global.reactor.rID_2   = 4.6;% internal diameter of the reactor  [cm]
+      Global.reactor.rID     = 4;% internal diameter of the reactor  [cm]
+      Global.reactor.rID_2   = 4;% internal diameter of the reactor  [cm]
       Global.reactor.bHeight = 23; % bed height                        [cm]
       Global.reactor.rHeight = 94; % reactor height                    [cm]
       Global.reactor.rArea1   = pi*(Global.reactor.rID/2)^2; % area    [cm2]
@@ -49,6 +60,13 @@ function Global = globalDataFcn()
       Global.reactor.z2      = linspace(Global.reactor.bHeight,  ...
                                         Global.reactor.rHeight,  ...
                                         Global.n2)'; % mesh2           [cm]
+
+% ----------| FIT'S Functions |--------------------------------------------
+      data_mu               = load('data_mu.mat');
+      [fit_mu_N2, ~]        = muFitFcn(data_mu.T_N2, data_mu.mu_N2);
+      [fit_mu_O2, ~]        = muFitFcn(data_mu.T_O2, data_mu.mu_O2);
+      Global.fits.fit_mu_N2 = fit_mu_N2;
+      Global.fits.fit_mu_O2 = fit_mu_O2;
 % ---------- fluid Dynamics -----------------------------------------------
       Global.fDynamics.usg0 = Global.QT_in./...
                               (Global.reactor.rArea1*60.0); 
@@ -143,4 +161,6 @@ function Global = globalDataFcn()
       Global.Pcr.H2  = 12.930;       % - H2                           [bar]
       Global.Pcr.H2O = 220.64;       % - H2O                          [bar]
       Global.Pcr.N2  = 33.980;       % - N2                           [bar]
+
+
 end
