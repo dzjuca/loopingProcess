@@ -9,6 +9,15 @@
     format shortG
 % ---------- global constants ---------------------------------------------
     Global = globalDataFcn();
+
+    Cgas = [Global.streamGas.composition.N2, ... 
+            Global.streamGas.composition.O2]; 
+    T    = Global.Tbed;
+    umf  = umfFcn(Cgas, T, Global);
+
+
+
+
     NoN  = (1:(Global.n1*Global.Num_esp_1 + Global.n2*Global.Num_esp_2));
 % ---------- initial condition --------------------------------------------
     u0   = initialConditions(Global);

@@ -1,4 +1,4 @@
-function umf = umfFcn(T, Global)
+function umf = umfFcn(Cgas, T, Global)
 % -------------------------------------------------------------------------
     % umfFcn - function to calculate the minimal fluiditation velocity
     % ----------------------------| input |--------------------------------
@@ -11,16 +11,26 @@ function umf = umfFcn(T, Global)
     dp      = Global.carrier.dp;
     phi     = Global.carrier.sphericity;
     rho_s   = Global.carrier.rho_s ;
-    g       = Global.g;          % Gravity                  [cm/s2]
+    g       = Global.g;               
     Emf     = Global.fDynamics.Emf ;
-    mu_pure = Global.fits;
 % -------------------------------------------------------------------------
-
-    mu_g  = gasMixViscosity(T, mu_pure);
-
-
-    rho_g = gasMixDensity(Global);
+    mu_g    = gasMixViscosityFcn(Cgas, T, Global);
+    rho_g   = gasMixDensityFcn(Cgas, T, Global);
 % --------------------| Reynolds Particle |--------------------------------
-    umf   = 0.55;
+    umf_1   = (((phi*dp)^2)/(150))*((rho_s - rho_g)*g/(mu_g))*((Emf^3)/(1 - Emf));
+    % ---------------------------------------------------------------------
+    umf_2   = (((phi*dp)/(1.75))*((rho_s - rho_g)*g/(rho_g))*(Emf^3))^(1/2);
+% -------------------------------------------------------------------------
+    Re_p_mf_1 = reynoldsParticleFcn(rho_g, dp, umf_1, mu_g);
+    Re_p_mf_2 = reynoldsParticleFcn(rho_g, dp, umf_2, mu_g);
+% -------------------------------------------------------------------------
+    if (Re_p_mf_1 < 20)
+        umf = umf_1;
+    elseif(Re_p_mf_2 > 1000)
+        umf = umf_2;
+    else
+        umf = umf_1;
+        disp('The minimal fluiditation velocity is not < 20 or > 1000');
+    end
 % -------------------------------------------------------------------------
 end

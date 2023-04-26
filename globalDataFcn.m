@@ -18,8 +18,8 @@ function Global = globalDataFcn()
       Global.n2         = 60;            % mesh points number           [#]
       Global.nt         = Global.n1 + Global.n2; % total mesh points n  [#]
 % ----------| Flow rate and concentration of species |---------------------
-      Global.streamGas.mmass.O2      = 31.9990;  % - O2             [g/mol]
       Global.streamGas.mmass.N2      = 28.0140;  % - N2             [g/mol]
+      Global.streamGas.mmass.O2      = 31.9990;  % - O2             [g/mol]
       Global.streamSolid.mmass.Ni    = 58.6934;  % - Ni             [g/mol]
       Global.streamSolid.mmass.NiO   = 74.6920;  % - NiO            [g/mol]
       Global.streamSolid.mmass.Al2O3 = 101.9610; % - Al2O3          [g/mol]
@@ -53,7 +53,7 @@ function Global = globalDataFcn()
       Global.reactor.rID_2   = 4;% internal diameter of the reactor  [cm]
       Global.reactor.bHeight = 23; % bed height                        [cm]
       Global.reactor.rHeight = 94; % reactor height                    [cm]
-      Global.reactor.rArea1   = pi*(Global.reactor.rID/2)^2; % area    [cm2]
+      Global.reactor.rArea1  = pi*(Global.reactor.rID/2)^2; % area    [cm2]
       Global.reactor.z1      = linspace(0,                       ...
                                     Global.reactor.bHeight,      ...
                                     Global.n1)'; % mesh                [cm]
@@ -65,32 +65,23 @@ function Global = globalDataFcn()
       data_mu               = load('data_mu.mat');
       [fit_mu_N2, ~]        = muFitFcn(data_mu.T_N2, data_mu.mu_N2);
       [fit_mu_O2, ~]        = muFitFcn(data_mu.T_O2, data_mu.mu_O2);
-      Global.fits.fit_mu_N2 = fit_mu_N2;
-      Global.fits.fit_mu_O2 = fit_mu_O2;
+      Global.fits.mu_p.N2 = fit_mu_N2;%                            [g/cm s]
+      Global.fits.mu_p.O2 = fit_mu_O2;%                            [g/cm s]
 % ---------- fluid Dynamics -----------------------------------------------
-      Global.fDynamics.usg0 = Global.QT_in./...
-                              (Global.reactor.rArea1*60.0); 
-                                     % In-Flow rate                  [cm/s]
-      Global.fDynamics.usg0_umf = 5; % ratio usg0/umf                    []
-      Global.fDynamics.umf  = Global.fDynamics.usg0/... 
-                              Global.fDynamics.usg0_umf;
-                              % minimum fluidization velocity        [cm/s] 
-      Global.fDynamics.fw   = 0.15;% fraction of wake in bubbles         []
-      Global.fDynamics.Emf  = 0.45;% minimum fluidization porosity       []
-      Global.fDynamics.a_u0 = 7;   %                                  [s-1]
-      Global.fDynamics.f_d  = 0.3; %                                     []
+      Global.fDynamics.usg0  = g_volFlow/(Global.reactor.rArea1);%   [cm/s]
+      Global.fDynamics.fw    = 0.15;% fraction of wake in bubbles        []
+      Global.fDynamics.Emf   = 0.45;% minimum fluidization porosity      []
+      Global.fDynamics.a_u0  = 7;   %                                 [s-1]
+      Global.fDynamics.f_d   = 0.3; %                                    []
       Global.fDynamics.Pe_ax = 6;  % Axial Peclet Number                 []
-
 % ---------- Carrier Data -------------------------------------------------
       Global.carrier.R       = 8.314472;  % Universal Gas Constant [J/molK] 
       Global.carrier.a0      = 1020000;   % specific surface area   [cm2/g]
-      Global.carrier.C_NiO_o = 0.14;      % NiO concentration    [gNiO/g-c]=== 0.08
       Global.carrier.load    = 300;       % catalyst weight             [g]
       Global.carrier.dp          = 0.014; % particle diameter          [cm]
       Global.carrier.bulkDensity = 1.1;   % particle density        [g/cm3]
-      Global.carrier.density     = 0.785; % particle density        [g/cm3]
       Global.carrier.sphericity  = 0.95;  % particle sphericity          []
-      Global.carrier.rho_s       = 3.8; %1.1;   % particle density        [g/cm3]
+      Global.carrier.rho_s       = 3.8;   % particle density        [g/cm3]
 % ---------- molar mass for each specie -----------------------------------
       Global.MMASS(1) = 16.0426;      % - CH4                       [g/mol]
       Global.MMASS(2) = 44.0090;      % - CO2                       [g/mol]
@@ -161,6 +152,5 @@ function Global = globalDataFcn()
       Global.Pcr.H2  = 12.930;       % - H2                           [bar]
       Global.Pcr.H2O = 220.64;       % - H2O                          [bar]
       Global.Pcr.N2  = 33.980;       % - N2                           [bar]
-
-
+% -------------------------------------------------------------------------
 end
