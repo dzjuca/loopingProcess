@@ -14,6 +14,7 @@
             Global.streamGas.composition.O2]; 
     T    = Global.Tbed;
     umf  = umfFcn(Cgas, T, Global);
+     ut  = terminalVelocityFcn(Cgas, T, Global);
 
 
 
