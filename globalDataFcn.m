@@ -24,7 +24,7 @@ function Global = globalDataFcn()
       Global.streamSolid.mmass.NiO   = 74.6920;  % - NiO            [g/mol]
       Global.streamSolid.mmass.Al2O3 = 101.9610; % - Al2O3          [g/mol]
 % ----- total feed flow in the reactor's bottom ---------------------------
-            g_molFlow   = 0.010782;            %                    [mol/s]
+            g_molFlow   = (10/3600); %0.010782;            %        [mol/s]
             g_volFlow   = g_molFlow*22.4*1000; %                    [cm3/s]
             g_O2_r      = 0.21;                % ratio                  [%]
             g_N2_r      = 0.79;                % ratio                  [%]

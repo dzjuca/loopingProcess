@@ -15,6 +15,8 @@
     T    = Global.Tbed;
     umf  = umfFcn(Cgas, T, Global);
      ut  = terminalVelocityFcn(Cgas, T, Global);
+     db  = bubbleDiameterFcn(umf, Global);
+     ub  = bubbleVelocityFcn(umf, db, Global);
 
 
 

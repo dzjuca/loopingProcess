@@ -21,11 +21,11 @@ function ut = terminalVelocityFcn(Cgas, T, Global)
 
         ut = ut1;
 
-    elseif (Re_p_2 <= 0.4 && Re_p_2 <= 500)
+    elseif (Re_p_2 >= 0.4 && Re_p_2 < 500)
 
         ut = ut2;
 
-    elseif (Re_p_3 <= 500 && Re_p_3 <= 2e5)
+    elseif (Re_p_3 >= 500 && Re_p_3 <= 2e5)
 
         ut = ut3;
 
