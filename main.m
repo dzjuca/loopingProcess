@@ -13,10 +13,14 @@
     Cgas = [Global.streamGas.composition.N2, ... 
             Global.streamGas.composition.O2]; 
     T    = Global.Tbed;
+    Emf  = EmfFcn(Global);
     umf  = umfFcn(Cgas, T, Global);
      ut  = terminalVelocityFcn(Cgas, T, Global);
      db  = bubbleDiameterFcn(umf, Global);
      ub  = bubbleVelocityFcn(umf, db, Global);
+   alpha = alphaFcn(ub, umf, Global);
+      us = solidBedVelocityFcn(ub, alpha, Global);
+      ue = emulsionBedVelocityFcn(us, umf, Emf, Global);
 
 
 

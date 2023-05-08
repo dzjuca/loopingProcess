@@ -1,13 +1,17 @@
-function Emf = EmfFcn(phi, mu_g, rho_s, rho_g, dp, g)
+function Emf = EmfFcn(Global)
+%        Emf = EmfFcn(phi, mu_g, rho_s, rho_g, dp, g)
 
+% -------------------------------------------------------------------------
+
+      phi =   Global.carrier.sphericity;
     Emf_1 = (1/(14*phi))^(1/3);
     
 % -------------------------------------------------------------------------
 
-    tmp_1 = 0.586*phi;
-    tmp_3 = rho_g/rho_s;
-    tmp_2 = (mu_g^2)/(rho_g*(rho_s - rho_g)*g*(dp^3));
-    Emf_2 = ((tmp_1)^(-0.72))*((tmp_2)^(0.029))*((tmp_3)^(0.021));
+%     tmp_1 = 0.586*phi;
+%     tmp_3 = rho_g/rho_s;
+%     tmp_2 = (mu_g^2)/(rho_g*(rho_s - rho_g)*g*(dp^3));
+%     Emf_2 = ((tmp_1)^(-0.72))*((tmp_2)^(0.029))*((tmp_3)^(0.021));
 
 % -------------------------------------------------------------------------
 
@@ -17,14 +21,16 @@ function Emf = EmfFcn(phi, mu_g, rho_s, rho_g, dp, g)
 
 % -------------------------------------------------------------------------
 
-    if Emf_2 > 0.50
-        
-        Emf = Emf_1;
+%     if Emf_2 > 0.50
+%         
+%         Emf = Emf_1;
+% 
+%     else 
+%         
+%         Emf = Emf_2;
+% 
+%     end
 
-    else 
-        
-        Emf = Emf_2;
-
-    end
+Emf = Emf_1;
 
 end
