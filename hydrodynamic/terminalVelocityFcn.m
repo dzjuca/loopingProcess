@@ -10,7 +10,7 @@ function ut = terminalVelocityFcn(Cgas, T, Global)
     rho_g   = gasMixDensityFcn(Cgas, T, Global);
 
     ut1 = (dp^2)*(rho_s - rho_g)*g/(18*mu_g);
-    ut2 = ((3.03*dp*(rho_s - rho_g)*g)/(rho_g))^(1/2)
+    ut2 = ((3.03*dp*(rho_s - rho_g)*g)/(rho_g))^(1/2);
     ut3 = ((4/225)*(((dp^3)*((rho_s - rho_g)^2)*(g^2))/(rho_g*mu_g)))^(1/3);
 
     Re_p_1 = (dp*rho_g*ut1)/mu_g;
@@ -21,11 +21,11 @@ function ut = terminalVelocityFcn(Cgas, T, Global)
 
         ut = ut1;
 
-    elseif (Re_p_2 <= 0.4 && Re_p_2 <= 500)
+    elseif (Re_p_2 >= 0.4 && Re_p_2 < 500)
 
         ut = ut2;
 
-    elseif (Re_p_3 <= 500 && Re_p_3 <= 2e5)
+    elseif (Re_p_3 >= 500 && Re_p_3 <= 2e5)
 
         ut = ut3;
 

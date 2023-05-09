@@ -15,7 +15,7 @@ function umf = umfFcn(Cgas, T, Global)
 % -------------------------------------------------------------------------
     mu_g    = gasMixViscosityFcn(Cgas, T, Global);
     rho_g   = gasMixDensityFcn(Cgas, T, Global);
-    Emf     = EmfFcn(phi, mu_g, rho_s, rho_g, dp, g);
+    Emf     = EmfFcn(Global);
 % --------------------| Reynolds Particle |--------------------------------
     umf_1   = (((phi*dp)^2)/(150))*((rho_s - rho_g)*g/(mu_g))*((Emf^3)/(1 - Emf));
     % ---------------------------------------------------------------------
