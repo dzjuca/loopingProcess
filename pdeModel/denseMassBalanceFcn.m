@@ -4,75 +4,78 @@ function mb_dp = denseMassBalanceFcn(u, Tbed, Global)
 % --------------------| constants values |---------------------------------
     index1  = Global.n1;
 % ---------- bubble - ubFcn.m ---------------------------------------------
-    [ub,db,us,ue,alpha] = ubFcn(Global);   
+    ub    = Global.fDynamics.ub;
+    db    = Global.fDynamics.db;
+    us    = Global.fDynamics.us;
+    ue    = Global.fDynamics.ue;
+    alpha = Global.fDynamics.alpha;
 % --------------------| Boundary Conditions Dense Phase |------------------
     [gas.bubble, C_g_b]   = bc_dp_gb_Fcn (u, Global); 
     [gas.emulsion, C_g_e] = bc_dp_ge_Fcn (u, Global); 
     [solid, C_s_w, C_s_e] = bc_dp_swe_Fcn(u, Global); 
 % ---------- concentrations dense phase vector ----------------------------
-    u1b = gas.bubble.u1b;   u2b = gas.bubble.u2b;   u3b = gas.bubble.u3b;
-    u4b = gas.bubble.u4b;   u5b = gas.bubble.u5b;   u6b = gas.bubble.u6b;
-    u1e = gas.emulsion.u1e; u2e = gas.emulsion.u2e; u3e = gas.emulsion.u3e;
-    u4e = gas.emulsion.u4e; u5e = gas.emulsion.u5e; u6e = gas.emulsion.u6e;
-    u7w = solid.wake.u7w;   u8w = solid.wake.u8w;   u9w = solid.wake.u9w;
-    u7e = solid.emulsion.u7e; 
-    u8e = solid.emulsion.u8e; 
-    u9e = solid.emulsion.u9e;
+    g1b = gas.bubble.g1b;   
+    g2b = gas.bubble.g2b;   
+
+    g1e = gas.emulsion.g1e; 
+    g2e = gas.emulsion.g2e; 
+
+    s1w = solid.wake.s1w;   
+    s2w = solid.wake.s2w;   
+    s3w = solid.wake.s3w;
+
+    s1e = solid.emulsion.s1e; 
+    s2e = solid.emulsion.s2e; 
+    s3e = solid.emulsion.s3e;
+
 % -------------------------------------------------------------------------
     C_gs_dp.C_g_b = C_g_b; C_gs_dp.C_g_e = C_g_e;
     C_gs_dp.C_s_w = C_s_w; C_gs_dp.C_s_e = C_s_e;
 % --------------------| Mass Balance - Gas - Bubble & Wake Phase | --------
     id_1 = 'FGBurbuja'; id_2 = 'FGas';
-    u1bt = massBalanceFcn(u1b, u1e, C_gs_dp, Tbed, alpha, ub, db, ... 
-                          Global, id_1, id_2, 'CH4');
-    u2bt = massBalanceFcn(u2b, u2e, C_gs_dp, Tbed, alpha, ub, db, ...
-                          Global, id_1, id_2, 'CO2');
-    u3bt = massBalanceFcn(u3b, u3e, C_gs_dp, Tbed, alpha, ub, db, ...
-                          Global, id_1, id_2, 'CO' );
-    u4bt = massBalanceFcn(u4b, u4e, C_gs_dp, Tbed, alpha, ub, db, ...
-                          Global, id_1, id_2, 'H2' );
-    u5bt = massBalanceFcn(u5b, u5e, C_gs_dp, Tbed, alpha, ub, db, ...
-                          Global, id_1, id_2, 'H2O');
-    u6bt = massBalanceFcn(u6b, u6e, C_gs_dp, Tbed, alpha, ub, db, ... 
-                          Global, id_1, id_2, 'N2' );
+    g1bt = massBalanceFcn(g1b, g1e, C_gs_dp, Tbed, alpha, ub, db, ... 
+                          Global, id_1, id_2, 'O2');
+    g2bt = massBalanceFcn(g2b, g2e, C_gs_dp, Tbed, alpha, ub, db, ...
+                          Global, id_1, id_2, 'N2');
 % --------------------| Mass Balance - Gas - Emulsion Phase |--------------
     id_1 = 'FGEmulsion'; 
-u1et = massBalanceFcn(u1b,u1e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'CH4');
-u2et = massBalanceFcn(u2b,u2e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'CO2');
-u3et = massBalanceFcn(u3b,u3e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'CO' );
-u4et = massBalanceFcn(u4b,u4e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'H2' );
-u5et = massBalanceFcn(u5b,u5e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'H2O');
-u6et = massBalanceFcn(u6b,u6e,C_gs_dp,Tbed,alpha,[ub,ue],db,Global,id_1,id_2,'N2' );
+    g1et = massBalanceFcn(g1b, g1e, C_gs_dp, Tbed, alpha, [ub,ue], db, ... 
+                          Global, id_1, id_2, 'O2');
+    g2et = massBalanceFcn(g2b, g2e, C_gs_dp, Tbed, alpha, [ub,ue], db, ... 
+                          Global, id_1, id_2, 'N2');
 % --------------------| Mass Balance - Solid - Wake Phase |----------------
-id_1 = 'FSEstela'; id_2 = 'FSolido';
-u7wt = massBalanceFcn(u7w,u7e,C_gs_dp,Tbed,alpha,ub,db,Global,id_1,id_2,'NiO');
-u8wt = massBalanceFcn(u8w,u8e,C_gs_dp,Tbed,alpha,ub,db,Global,id_1,id_2,'Ni' );
-u9wt = massBalanceFcn(u9w,u9e,C_gs_dp,Tbed,alpha,ub,db,Global,id_1,id_2,'C'  );
+    id_1 = 'FSEstela'; id_2 = 'FSolido';
+    s1wt = massBalanceFcn(s1w, s1e, C_gs_dp, Tbed, alpha, ub, db, ...
+                          Global, id_1, id_2, 'Ni');
+    s2wt = massBalanceFcn(s2w, s2e, C_gs_dp, Tbed, alpha, ub, db, ... 
+                          Global, id_1, id_2, 'NiO');
+    s3wt = massBalanceFcn(s3w, s3e, C_gs_dp, Tbed, alpha, ub, db, ... 
+                          Global, id_1, id_2, 'Al2O3');
 % --------------------| Mass Balance - Solid - Emulsion Phase |------------
-id_1 = 'FSEmulsion'; 
-u7et = massBalanceFcn(u7w,u7e,C_gs_dp,Tbed,alpha,[ub,us],db,Global,id_1,id_2,'NiO');
-u8et = massBalanceFcn(u8w,u8e,C_gs_dp,Tbed,alpha,[ub,us],db,Global,id_1,id_2,'Ni' );
-u9et = massBalanceFcn(u9w,u9e,C_gs_dp,Tbed,alpha,[ub,us],db,Global,id_1,id_2,'C'  );
+    id_1 = 'FSEmulsion'; 
+    s1et = massBalanceFcn(s1w, s1e, C_gs_dp, Tbed, alpha, [ub,us], db, ...
+                          Global, id_1, id_2, 'Ni');
+    s2et = massBalanceFcn(s2w, s2e, C_gs_dp, Tbed, alpha, [ub,us], db, ...
+                          Global, id_1, id_2, 'NiO');
+    s3et = massBalanceFcn(s3w, s3e, C_gs_dp, Tbed, alpha, [ub,us], db, ...
+                          Global, id_1, id_2, 'Al2O3');
 
 % --------------------| Boundary Conditions 2 |----------------------------
 % ---------- z = 0 gas - bubble & wake phase ------------------------------
-    u1bt(1) = 0; u2bt(1) = 0; u3bt(1) = 0; 
-    u4bt(1) = 0; u5bt(1) = 0; u6bt(1) = 0;
+    g1bt(1) = 0; g2bt(1) = 0; 
 % ---------- z = 0 gas - emulsion phase -----------------------------------
-    u1et(1) = 0; u2et(1) = 0; u3et(1) = 0; 
-    u4et(1) = 0; u5et(1) = 0; u6et(1) = 0;
+    g1et(1) = 0; g2et(1) = 0; 
 % ---------- z = 0 solid - wake & emulsion phases -------------------------
-    u7wt(1) = u7et(1); 
-    u8wt(1) = u8et(1); 
-    u9wt(1) = u9et(1);
+    s1wt(1) = s1et(1); 
+    s2wt(1) = s2et(1); 
+    s3wt(1) = s3et(1);
 % ---------- z = Zg solid - wake & emulsion phase -------------------------
-    u7et(index1) = u7wt(index1); 
-    u8et(index1) = u8wt(index1);
-    u9et(index1) = u9wt(index1);
+    s1et(index1) = s1wt(index1); 
+    s2et(index1) = s2wt(index1);
+    s3et(index1) = s3wt(index1);
 % --------------------| Temporal Variation Vector dudt |-------------------
-    mb_dp.ut = [u1bt; u2bt; u3bt; u4bt; u5bt; u6bt; ...
-                u1et; u2et; u3et; u4et; u5et; u6et; ...
-                u7wt; u8wt; u9wt; u7et; u8et; u9et];
+    mb_dp.ut = [g1bt; g2bt; g1et; g2et; ...
+                s1wt; s2wt; s3wt; s1et; s2et; s3et];
     mb_dp.C_gs_dp = C_gs_dp;
 % -------------------------------------------------------------------------
 end

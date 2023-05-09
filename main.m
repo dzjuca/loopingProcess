@@ -9,23 +9,10 @@
     format shortG
 % ---------- global constants ---------------------------------------------
     Global = globalDataFcn();
-
-    Cgas = [Global.streamGas.composition.N2, ... 
-            Global.streamGas.composition.O2]; 
-    T    = Global.Tbed;
-    Emf  = EmfFcn(Global);
-    umf  = umfFcn(Cgas, T, Global);
-     ut  = terminalVelocityFcn(Cgas, T, Global);
-     db  = bubbleDiameterFcn(umf, Global);
-     ub  = bubbleVelocityFcn(umf, db, Global);
-   alpha = alphaFcn(ub, umf, Global);
-      us = solidBedVelocityFcn(ub, alpha, Global);
-      ue = emulsionBedVelocityFcn(us, umf, Emf, Global);
-
-
-
-
-    NoN  = (1:(Global.n1*Global.Num_esp_1 + Global.n2*Global.Num_esp_2));
+% --------------------------------------------------------------------------
+    Global = hydrodynamicFcn(Global);
+% --------------------------------------------------------------------------
+    NoN    = (1:(Global.n1*Global.Num_esp_1 + Global.n2*Global.Num_esp_2));
 % ---------- initial condition --------------------------------------------
     u0   = initialConditions(Global);
 % ---------- time simulation (s) ------------------------------------------

@@ -1,15 +1,14 @@
 function [bubble, C_g_b] = bc_dp_gb_Fcn(u, Global)
-% ---------- z = 0 gas - bubble & wake phase ------------------------------
-
-% ---------- gas - bubble & wake phases------------------------------------
+% -------------------------------------------------------------------------
     id_g_b  = 'gas_bubble'; 
-    [u1b, u2b, u3b, u4b, u5b, u6b] = assignValuesFcn(u, Global, id_g_b);
+    [g1b, g2b ] = assignValuesFcn(u, Global, id_g_b);
+% -------------------------------------------------------------------------
+    g1b(1) = Global.streamGas.composition.O2; 
+    g2b(1) = Global.streamGas.composition.N2; 
 
-    u1b(1) = Global.CH4in; u2b(1) = 0.000; u3b(1) = 0.000; 
-    u4b(1) = 0.000;        u5b(1) = 0.000; u6b(1) = Global.N2in;
-
-    bubble.u1b = u1b; bubble.u2b = u2b; bubble.u3b = u3b;
-    bubble.u4b = u4b; bubble.u5b = u5b; bubble.u6b = u6b;
-    C_g_b = [u1b,u2b,u3b,u4b,u5b,u6b];
-
+    bubble.g1b = g1b; 
+    bubble.g2b = g2b; 
+% -------------------------------------------------------------------------
+    C_g_b = [g1b, g2b];
+% -------------------------------------------------------------------------
 end

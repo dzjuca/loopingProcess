@@ -1,16 +1,22 @@
 function [emulsion, C_g_e] = bc_dp_ge_Fcn(u, Global)
-% ---------- z = 0 gas - emulsion phase -----------------------------------
+% -------------------------------------------------------------------------
 
-% ---------- gas - emulsion phase -----------------------------------------
     id_g_e  = 'gas_emulsion';
-    [u1e, u2e, u3e, u4e, u5e, u6e] = assignValuesFcn(u, Global, id_g_e);
+    [g1e, g2e] = assignValuesFcn(u, Global, id_g_e);
 
-    u1e(1) = Global.CH4in; u2e(1) = 0.000; u3e(1) = 0.000;
-    u4e(1) = 0.000;        u5e(1) = 0.000; u6e(1) = Global.N2in;
+% -------------------------------------------------------------------------
 
-    emulsion.u1e = u1e; emulsion.u2e = u2e; emulsion.u3e = u3e;
-    emulsion.u4e = u4e; emulsion.u5e = u5e; emulsion.u6e = u6e;
+    g1e(1) = Global.streamGas.composition.O2; 
+    g2e(1) = Global.streamGas.composition.N2; 
 
-    C_g_e = [u1e, u2e, u3e, u4e, u5e, u6e];
+% -------------------------------------------------------------------------
 
+    emulsion.g1e = g1e; 
+    emulsion.g2e = g2e; 
+
+% -------------------------------------------------------------------------
+
+    C_g_e = [g1e, g2e];
+
+% -------------------------------------------------------------------------
 end

@@ -9,11 +9,11 @@ function u = initialConditions(Global)
 % -------------------------------------------------------------------------  
     n1     = Global.n1;
     n2     = Global.n2;
-    N2o    = Global.N2in;
-    O2o    = Global.O2in;
-    NiOo   = Global.carrier.NiOo;
-    Nio    = Global.carrier.Nio;
-    Al2O3o = Global.carrier.Al2O3o;
+    N2o    = Global.streamGas.composition.N2;
+    O2o    = Global.streamGas.composition.O2;
+    NiOo   = Global.streamSolid.composition.NiO;
+    Nio    = Global.streamSolid.composition.Ni;
+    Al2O3o = Global.streamSolid.composition.Al2O3;
 % ----------------------------| dense phase |------------------------------
 % ---------- gas species - Bubble & Wake phases----------------------------
     g1b = zeros(n1,1);   g2b = zeros(n1,1); 
