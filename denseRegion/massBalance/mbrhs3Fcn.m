@@ -17,9 +17,9 @@ function RH3 = mbrhs3Fcn(alpha, db, ub, CiBW, CiE, CTBW, Tbe, Global, ...
     %       RH3 = right-hand side term-3   [mol/cm3-s] [gSolid/g-carrier-s] 
 % -------------------------------------------------------------------------
 
-    fw      = Global.fDynamics.fw;
-    Emf     = Global.fDynamics.Emf; 
-    Dcat    = Global.carrier.rho_s;
+    fw   = Global.fDynamics.fw;
+    Emf  = Global.fDynamics.Emf; 
+    Dcat = Global.carrier.bulkDensity;
 
 % -------------------------------------------------------------------------
 

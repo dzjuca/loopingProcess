@@ -79,7 +79,7 @@ function Global = globalDataFcn()
       Global.carrier.a0      = 1020000;   % specific surface area   [cm2/g]
       Global.carrier.load    = 300;       % catalyst weight             [g]
       Global.carrier.dp          = 0.014; % particle diameter          [cm]
-      Global.carrier.bulkDensity = 1.1;   % particle density        [g/cm3]
+      Global.carrier.bulkDensity = 1.0;   % particle density        [g/cm3]
       Global.carrier.sphericity  = 0.95;  % particle sphericity          []
       Global.carrier.rho_s       = 3.8;   % particle density        [g/cm3]
 % ---------- molar mass for each specie -----------------------------------

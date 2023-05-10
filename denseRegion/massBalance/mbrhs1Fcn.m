@@ -14,7 +14,7 @@ function RH1 = mbrhs1Fcn(alpha,ubes,Ci,Global,caracter)
 
     fw   = Global.fDynamics.fw;
     Emf  = Global.fDynamics.Emf; 
-    Dcat = Global.carrier.rho_s;
+    Dcat = Global.carrier.bulkDensity;
     z1   = Global.reactor.z1;  
     xl   = z1(1);
     xu   = z1(end);
