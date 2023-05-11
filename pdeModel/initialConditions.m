@@ -11,8 +11,8 @@ function u = initialConditions(Global)
     n2     = Global.n2;
     N2o    = Global.streamGas.composition.N2;
     O2o    = Global.streamGas.composition.O2;
-  % NiOo   = Global.streamSolid.composition.NiO;
-    NiOo   = 1e-6;
+    % NiOo   = Global.streamSolid.composition.NiO;
+    NiOo   = 1e-10;
     Nio    = Global.streamSolid.composition.Ni;
     Al2O3o = Global.streamSolid.composition.Al2O3;
 % ----------------------------| dense phase |------------------------------

@@ -27,6 +27,16 @@
     pdeModel = @(t,u)pdeFcn(t,u,Global);
     [t,u]    = ode15s(pdeModel,tout,u0,options);  
 % -----
-%    graphsMfgAllSpeciesFcn(t, u, Global)
-%    graphsMf_g_lp_Fcn(t, u, Global)
+    graphs_C_g_b_Fcn(t, u, Global)
+    graphs_C_g_e_Fcn(t, u, Global)
+    graphs_C_s_w_Fcn(t, u, Global)
+    graphs_C_s_e_Fcn(t, u, Global)
+% -----
+    graphsCgbAllSpeciesFcn(t, u, Global)
+    graphsCgeAllSpeciesFcn(t, u, Global)
+    graphsCswAllSpeciesFcn(t, u, Global)
+    graphsCseAllSpeciesFcn(t, u, Global)
+% -----
+    graphsFmgAllSpeciesFcn(t, u, Global)
+    graphsFmsAllSpeciesFcn(t, u, Global)
 % ---------------------------| End Program |-------------------------------
