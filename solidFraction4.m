@@ -2,10 +2,10 @@ clc
 clear 
 close all
 
-dp = 55e-4; % cm =====> revisar valor
-di = 40;    % cm
-Ht = 600;   % cm
-Gs = 200*(1000/(100^2));   % g/cm2s
+dp = 220e-4; % cm =====> revisar valor
+di = 160;    % cm
+Ht = 150;   % cm
+Gs = 25*(1000/(100^2));   % g/cm2s
 n_o = 40;   % mol/s
 T = 300;    % K
 P = 1.3;    % atm
@@ -13,17 +13,26 @@ R = 0.08205746;  % [atm.L/mol.K]
 g = 981;    % cm/s2
 nd = 20;    % mesh points
 nl = 80;    % mesh points
+k_3p = 10;  % m3/m3.cat.s = cm3/cm3.cat.s
+k_1p = 0.01;% m3/kg.cat.s
+D_eff = 1e-7*((100^3)/100); % cm3/cm cat.s
+H_d = 80;   % cm
+E_bed = 0.6;
 % -------------------------------------------------------------------------
-rho_g = 0.0012; % g/cm3
-rho_s = 1.0000; % g/cm3
-mu_g  = 1.8e-4; % g/cms
+    M_T = (dp/6)*(sqrt(k_3p/D_eff));
+% -------------------------------------------------------------------------
+    rho_g = 0.0012; % g/cm3
+    rho_s = 1.0000; % g/cm3
+    mu_g  = 1.8e-4; % g/cms
+% -------------------------------------------------------------------------
+A   = pi*(di/2)^2; % cm2
 
+% -------------------------------------------------------------------------
+W_oc = H_d*rho_s*(1 - E_bed)*A;
 % -------------------------------------------------------------------------
 
 q_o = (n_o*R*T/P)*1000;    % cm3/s
 
-% -------------------------------------------------------------------------
-A   = pi*(di/2)^2; % cm2
 
 % -------------------------------------------------------------------------
 u_0 = q_o/A;       % cm/s
@@ -42,11 +51,20 @@ ut_ast = ((18/dp_ast^2)+(0.591/dp_ast^(1/2)))^(-1);
 ut = ut_ast*((mu_g*(rho_s - rho_g)*g)/(rho_g^2))^(1/3);
 
 % -------------------------------------------------------------------------
+% f_core = f_ast = 0.01
+% delta_d_FF = 0.6 - 0.9
+% k_cw = 5 - 20 s-1
+% E_wall = Emf = 0.5 - 0.6;
+% fd = 0.4 - 0.6    ===> bubbling bed
+% fd = 0.2 - 0.4    ===> turbulent bed
+% fd = 0.06 - 0.2   ===> fast fluidized bed
+% fd = 0.01 - 0.06  ===> pneumatic transport
 
-f_d   = 0.06; 
+f_d   = 0.16; 
 f_ast = 0.01;
 u0_a  = 3;    % s-1
-
+delta = 0.7;  % m3 of core / m3 of dense region
+Kcw   = 5;    % s-1
 % -------------------------------------------------------------------------
 a = u0_a/u_0; % cm-1
 
@@ -55,11 +73,14 @@ f_ex = Gs/(rho_s*(u_0 - ut));
 
 % -------------------------------------------------------------------------
 
-Hl = (1/a)*log((f_d - f_ast)/(f_ex - f_ast));
+% Hl = (1/a)*log((f_d - f_ast)/(f_ex - f_ast));
+
+Hl = Ht - H_d;
 
 % -------------------------------------------------------------------------
 
-Hd = Ht - Hl;
+% Hd = Ht - Hl;
+Hd = H_d;
 
 % -------------------------------------------------------------------------
 
@@ -84,7 +105,8 @@ H  = zl - zd(end);
 % -------------------------------------------------------------------------
 fl = f_ast + (f_d - f_ast)*exp(-a*H);
 fd = zeros(nd, 1);
-fd(:,1) = f_d;
+% fd(:,1) = f_d;
+fd(:,1) = 0.55;
 
 % -------------------------------------------------------------------------
 
@@ -102,10 +124,10 @@ FZ1 = 14; MZ1 = 5; XLFZ = 14; YLFZ = 14; LFZ = 5;
 
 id = exist('graphs/solidFraction','file');
 if id == 7
-    dir = strcat(pwd,'/','graphs/solidFraction/','PC');
+    dir = strcat(pwd,'/','graphs/solidFraction/','BFB');
 else
     mkdir('graphs/solidFraction')
-    dir = strcat(pwd,'/','graphs/solidFraction/','PC');
+    dir = strcat(pwd,'/','graphs/solidFraction/','BFB');
 end
 
 fig1 = figure;
@@ -120,22 +142,24 @@ axes('Parent',fig1,'FontSize',FZ1,'XGrid','off', ...
 set(fig1, 'Color', 'w') 
 
 hold on
-plot(fl, zl, '-b', MarkerSize=2,LineWidth=1 )
+% plot(fl, zl, '-b', MarkerSize=2,LineWidth=1 )
 plot(fd, zd, '-k', MarkerSize=2, LineWidth=1)
-xlim([0 0.6])
+
 
 xlabel('$f_{s}\  \left[ \right]  $','FontSize',XLFZ,      ...
 'interpreter','Latex')
+xlim([0 0.8])
 
 ylabel('$H\  \left[ cm\right]  $','FontSize',YLFZ,'interpreter','Latex')
+ylim([0 150])
 
 
 
 hold off
 
 ley1 = {'$dense phase$','$lean phase$'};
-legend(ley1,'Interpreter','Latex','Location','north',   ...
-    'Orientation','horizontal','FontSize',LFZ)
+%legend(ley1,'Interpreter','Latex','Location','north',   ...
+%   'Orientation','horizontal','FontSize',LFZ)
 
 hold off
 print(fig1,'-dpdf','-r500',dir)
